@@ -1,24 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
+import { ThemeProvider, Button } from "theme-ui";
+import theme from "@rebass/preset";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
-import * as firebaseui from "firebaseui";
-
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-firebase.initializeApp({
-  apiKey: "AIzaSyClCMTncHfSZERRPNULeGs2F8KSAkphI_Q",
-  authDomain: "ginder-app.firebaseapp.com",
-  projectId: "ginder-app",
-  storageBucket: "ginder-app.appspot.com",
-  messagingSenderId: "605363120970",
-  appId: "1:605363120970:web:72813cd0fe7ed18bb92fb3",
-  measurementId: "G-HFRG26XVBY",
-});
-
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyClCMTncHfSZERRPNULeGs2F8KSAkphI_Q",
+    authDomain: "ginder-app.firebaseapp.com",
+    projectId: "ginder-app",
+    storageBucket: "ginder-app.appspot.com",
+    messagingSenderId: "605363120970",
+    appId: "1:605363120970:web:72813cd0fe7ed18bb92fb3",
+    measurementId: "G-HFRG26XVBY",
+  });
+}
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
@@ -26,14 +27,19 @@ function App() {
   const [user] = useAuthState(auth);
 
   return (
-    <div className="App">
-      <header>
-        <h1>กินเดอร์ Ginder 🔥</h1>
-        <SignOut />
-      </header>
-
-      <section>{user ? <ChatRoom /> : <SignIn />}</section>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <header>
+          <h1>กินเดอร์ Ginder 🔥</h1>
+          <SignOut />
+        </header>
+        <section>{user ? <ChatRoom /> : <SignIn />}</section>
+      </div>
+      <Button variant="primary" mr={2}>
+        Beep
+      </Button>
+      <Button variant="secondary">Boop</Button>
+    </ThemeProvider>
   );
 }
 
