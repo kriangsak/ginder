@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
-import { ThemeProvider, Button } from "theme-ui";
+import { ThemeProvider, Button, Input } from "theme-ui";
 import theme from "@rebass/preset";
 
 import firebase from "firebase/app";
@@ -28,17 +28,20 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <div
+        sx={{
+          maxWidth: 512,
+          mx: "auto",
+          px: 3,
+          py: 4,
+        }}
+      >
         <header>
           <h1>กินเดอร์ Ginder 🔥</h1>
           <SignOut />
         </header>
         <section>{user ? <ChatRoom /> : <SignIn />}</section>
       </div>
-      <Button variant="primary" mr={2}>
-        Beep
-      </Button>
-      <Button variant="secondary">Boop</Button>
     </ThemeProvider>
   );
 }
@@ -72,7 +75,6 @@ function ChatRoom() {
     e.preventDefault();
 
     const { displayName, uid, photoURL } = auth.currentUser;
-    console.log("name", displayName);
     await messagesRef.add({
       displayName,
       text: formValue,
@@ -95,15 +97,16 @@ function ChatRoom() {
       </main>
 
       <form onSubmit={sendMessage}>
-        <input
+        <Input
+          mb={3}
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
           placeholder="say something nice"
         />
 
-        <button type="submit" disabled={!formValue}>
-          🕊️
-        </button>
+        <Button variant="primary" mr={2} type="submit" disabled={!formValue}>
+          🕊️ sent
+        </Button>
       </form>
     </>
   );
@@ -122,9 +125,7 @@ function ChatMessage(props) {
             photoURL || "https://api.adorable.io/avatars/23/abott@adorable.png"
           }
         />
-        <p>
-          {text} {displayName ? "...by " + displayName : ""}
-        </p>
+        <p>{text}</p>
       </div>
     </>
   );
